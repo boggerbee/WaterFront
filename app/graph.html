@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Water Control</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href='css/metricsgraphics.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Water Control</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/">Home</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="/">Home</a></li>
+      </ul>	
+	  <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+	  <div class="row center" id='levelgraph'></div>
+	  <div class="row center" id='flowgraph'></div>
+      <div class="row center">
+        <a href="" id="download-button" class="btn-large waves-effect waves-light orange">BUTTON</a>
+      </div>
+      <br><br>
+
+    </div>
+  </div>
+
+
+  <footer class="page-footer orange">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">About</h5>
+          <p class="grey-text text-lighten-4">
+			This is a test page for controlling the filling of a tank from a well using a bilge pump and a valve.
+		  </p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by AJ
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts  -->
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+
+	<!--build:js js/main.min.js -->
+	<script src="js/materialize.js"></script>
+	<script src="js/init.js"></script>
+	
+    <script src='js/MG.js'></script>
+    <script src='js/misc/utility.js'></script>
+    <script src='js/common/data_graphic.js'></script>
+    <script src='js/common/hooks.js'></script>
+    <script src='js/common/register.js'></script>
+    <script src='js/common/bootstrap_tooltip_popover.js'></script>
+    <script src='js/common/scales.js'></script>
+    <script src='js/common/chart_title.js'></script>
+    <script src='js/common/y_axis.js'></script>
+    <script src='js/common/x_axis.js'></script>
+    <script src='js/common/scales.js'></script>
+    <script src='js/common/init.js'></script>
+    <script src='js/common/markers.js'></script>
+    <script src='js/common/rollover.js'></script>
+    <script src='js/common/window_listeners.js'></script>
+    <script src='js/layout/bootstrap_dropdown.js'></script>
+    <script src='js/layout/button.js'></script>
+    <script src='js/charts/line.js'></script>
+    <script src='js/charts/histogram.js'></script>
+    <script src='js/charts/point.js'></script>
+    <script src='js/charts/bar.js'></script>
+    <script src='js/charts/table.js'></script>
+    <script src='js/charts/missing.js'></script>
+    <script src='js/misc/process.js'></script>
+    <script src='js/misc/smoothers.js'></script>
+    <script src='js/misc/formatters.js'></script>
+    <script src='js/misc/transitions.js'></script>
+    <script src='js/misc/error.js'></script>
+	<!-- endbuild -->
+	
+	<script>
+		var parseTime = d3.timeParse("%Y-%m-%dT%H:%M:%S");
+		var graphWidth = 500;
+		if(window.innerWidth <= 800) {
+			graphWidth = 300;
+		}
+		var globals = {};
+		
+		d3.json('http://data.kreutzer.no/dataserver/api/graphmarkers', function(data) {
+			data.forEach(function (d) {
+			var str = d.date; 
+			if (str != null) {
+				d.date = parseTime(str.substring(0, str.length - 9));
+			}
+			});	
+			globals.data = data;
+		});
+		d3.json('http://data.kreutzer.no/dataserver/api/graphlevel?hrs=24', function(data) {
+			data.forEach(function (d) {
+			var str = d.date; 
+			if (str != null) {
+				d.date = parseTime(str.substring(0, str.length - 9));
+			}
+			});	
+
+			MG.data_graphic({
+				title: "Level plot",
+				//description: "Plot of tank level last x days",
+				data: data,
+				width: graphWidth,
+				height: 200,
+				right: 40,
+				markers: globals.data,
+				linked: true,
+				format: 'percentage',
+				target: '#levelgraph'
+			});
+		});
+		d3.json('http://data.kreutzer.no/dataserver/api/graphflow?hrs=24', function(data) {
+			data.forEach(function (d) {
+			var str = d.date; 
+			if (str != null) {
+				d.date = parseTime(str.substring(0, str.length - 9));
+			}
+			});	
+
+			MG.data_graphic({
+				title: "Flow plot",
+				data: data,
+				width: graphWidth,
+				height: 200,
+				right: 40,
+				linked: true,
+				area: false,
+				//y_label: 'litres/min',
+				target: '#flowgraph'
+			});
+		});
+	</script>
+  </body>
+</html>

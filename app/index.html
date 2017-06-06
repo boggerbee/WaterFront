@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Water Control</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Water Control</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="graph.html">Graph</a></li>
+      </ul>
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="graph.html">Graph</a></li>
+      </ul>	
+	  <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>	  
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 id="status" class="header center orange-text">FULL</h1>
+      <div class="row center">
+		<!-- img src="tank.svg"/ -->
+        <!--h5 class="header col s12 light">Insert graph or SVG image of installation here</h5 -->
+      </div>
+      <div class="row center">
+        <a href="" id="download-button" class="btn-large waves-effect waves-light orange">AUTO</a>
+      </div>
+      <br><br>
+
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">opacity</i></h2>
+            <h5 id="level" class="center">98%</h5>
+            <p class="center light">Current water level</p>
+          </div>
+        </div>
+
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">input</i></h2>
+            <h5 id="flow" class="center">42 l/h</h5>
+            <p class="center light">Current water flow</p>
+          </div>
+        </div>
+		
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">local_gas_station</i></h2>
+            <h5 id="pump" class="center">ON</h5>
+            <p class="center light">Pump status</p>
+          </div>
+        </div>
+		
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">local_drink</i></h2>
+            <h5 id="valve" class="center">OPEN</h5>
+            <p class="center light">Valve status</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <br><br>
+
+    <div class="section">
+
+    </div>
+  </div>
+
+  <footer class="page-footer orange">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">About</h5>
+          <p class="grey-text text-lighten-4">
+			This is a test page for controlling the filling of a tank from a well using a bilge pump and a valve.
+		  </p>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Updated</h5>
+          <ul>
+            <li id="updated" class="white-text">date</li>
+          </ul>
+        </div>		
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by AJ
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts  -->
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<!--build:js js/main.min.js -->
+    <script src="js/materialize.js"></script>
+	<script src="js/init.js"></script>
+	<!-- endbuild -->
+	<script>
+	d3.json("http://data.kreutzer.no/dataserver/api/current", function(error, data) {
+		console.log(data);
+		document.getElementById("level").innerHTML = data.level.toFixed()+'%';
+		document.getElementById("flow").innerHTML = data.flow.toFixed(1)+' l/h';
+		document.getElementById("pump").innerHTML = data.pumpState;
+		document.getElementById("valve").innerHTML = data.valveState;
+		document.getElementById("status").innerHTML = data.state;
+		//document.getElementById("tank-text").innerHTML = data.level+'%';
+		
+		var str = data.date;
+		str = str.replace("T"," ");
+		document.getElementById("updated").innerHTML = str.substring(0, str.length - 9);
+	});
+	</script>
+  </body>
+</html>
