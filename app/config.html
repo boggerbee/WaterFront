@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Water Control</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href='css/metricsgraphics.css' rel='stylesheet' type='text/css'>
+  <script type="text/javascript">
+  var globals = {};
+	 function WebSocketInit() {
+		if ("WebSocket" in window) {
+		   // Let us open a web socket
+		   globals.ws = new WebSocket("ws://localhost:8088/dataserver-0.1/websocket");
+			
+		   globals.ws.onopen = function() {
+		   };
+			
+		   globals.ws.onmessage = function (evt) { 
+			  document.getElementById("ws_msg").innerHTML += evt.data+"<br/>";
+			  if (evt.data == "WHOAREYOU") {
+				globals.ws.send("GUI"); // register as gui client
+				globals.ws.send("getConfig");
+			  }
+		   };
+			
+		   globals.ws.onclose = function() { 
+			  // websocket is closed.
+			  document.getElementById("ws_msg").innerHTML = "Connection is closed..."; 
+		   };
+		} else {
+		   // The browser doesn't support WebSocket
+		   alert("WebSocket NOT supported by your Browser!");
+		}
+	 }
+	 function getCurrentConfig() {
+		globals.ws.send("getConfig");
+	 }
+  </script>
+  </head>
+<body>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script>
+	  $(document).ready(function() {
+		$('select').material_select();
+		// do init of options
+		WebSocketInit();
+		//getCurrentConfig();
+	  });
+  </script>
+  
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Water Control</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/">Home</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="/">Home</a></li>
+      </ul>	
+	  <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br/>
+	  <h2 class="header center orange-text">Innstillinger</h2>
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Fyllings-modus</span>
+              <p>Du kan velge om pumpen skal brukes under fylling eller ikke. Ved å bare la vannet falle naturlig vil brønnen ikke tømmes like raskt.</p>
+            </div>
+            <div class="card-action">
+			  <input name="group1" type="radio" id="fill1"/>
+			  <label class="white-text" for="fill1">Av</label>
+			  <input name="group1" type="radio" id="fill2" checked />
+			  <label class="white-text" for="fill2">Pumpe</label>
+			  <input name="group1" type="radio" id="fill3" />
+			  <label class="white-text" for="fill3">Naturlig fall</label>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Full-sensor</span>
+              <p>Velg om flottøren skal brukes for å starte og stoppe fylling, eller om nivåmåleren skal brukes.</p>
+            </div>
+            <div class="card-action">
+			  <input name="group2" type="radio" id="test1" checked />
+			  <label class="white-text" for="test1">Nivåmåler</label>
+			  <input name="group2" type="radio" id="test2" />
+			  <label class="white-text" for="test2">Flottør</label>
+            </div>
+          </div>
+        </div>
+      </div>
+	<br/>
+    </div>
+  </div>
+
+
+  <footer class="page-footer orange">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">About</h5>
+          <p class="grey-text text-lighten-4">
+			This is a test page for controlling the filling of a tank from a well using a bilge pump and a valve.
+		  </p>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Status</h5>
+          <ul>
+            <li id="ws_msg" class="white-text"></li>
+          </ul>
+        </div>		
+		
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by AJ
+      </div>
+    </div>
+  </footer>
+
+
+  </body>
+</html>
