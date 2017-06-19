@@ -10,6 +10,8 @@ var cssnano = require('gulp-cssnano');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
 var del = require('del');
+var war = require('gulp-war');
+var zip = require('gulp-zip');
 var runSequence = require('run-sequence');
 
 // Basic Gulp task syntax
@@ -80,11 +82,29 @@ gulp.task('css', function() {
     .pipe(gulp.dest('dist/css'))
 })
 
+// Copying js 
+gulp.task('js', function() {
+  return gulp.src('app/js/**/*')
+    .pipe(gulp.dest('dist/js'))
+})
+
 // Cleaning 
 gulp.task('clean', function() {
   return del.sync('dist').then(function(cb) {
     return cache.clearAll(cb);
   });
+})
+
+// war task
+gulp.task('war', function () {
+    gulp.src(["dist/**/*"])
+        .pipe(war({
+            welcome: 'index.html',
+            displayName: 'Grunt WAR',
+        }))
+        .pipe(zip('WaterFront.war'))
+        .pipe(gulp.dest("./dist"));
+ 
 })
 
 gulp.task('clean:dist', function() {
@@ -104,7 +124,10 @@ gulp.task('build', function(callback) {
   runSequence(
     'clean:dist',
     'sass',
-    ['useref', 'images', 'fonts','css'],
+    ['useref', 'images', 'fonts','css','js'],
+	'war',
     callback
   )
 })
+
+
