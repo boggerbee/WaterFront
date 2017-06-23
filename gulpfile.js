@@ -69,6 +69,11 @@ gulp.task('images', function() {
     })))
     .pipe(gulp.dest('dist/images'))
 });
+// Copying ico 
+gulp.task('ico', function() {
+  return gulp.src('app/*.ico')
+    .pipe(gulp.dest('dist/'))
+})
 
 // Copying fonts 
 gulp.task('fonts', function() {
@@ -124,7 +129,7 @@ gulp.task('build', function(callback) {
   runSequence(
     'clean:dist',
     'sass',
-    ['useref', 'images', 'fonts','css','js'],
+    ['useref', 'images', 'fonts','css','js','ico'],
 	'war',
     callback
   )
