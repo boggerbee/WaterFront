@@ -61,17 +61,20 @@
 			  if (evt.data == "WHOAREYOU") {
 				globals.ws.send("GUI"); // register as gui client
 				globals.ws.send("getConfig");
-			  } else {
-				obj = JSON.parse(evt.data);
-				if (obj.config != null) {
-					document.getElementById("ws_msg").innerHTML += "Config received for "+obj.config.id+"<br/>"
-					
-					fillMode = obj.config.fillMode;
-					document.getElementById(fillMode.toLowerCase()).checked = true;
-					fullMode = obj.config.fullMode;
-					document.getElementById(fullMode.toLowerCase()).checked = true;
-				} else {
-					document.getElementById("ws_msg").innerHTML += evt.data+"<br/>";
+			  } else if (evt.data != "ACK") {
+				var msg = evt.data+"<br/>"; 
+				try {
+					var obj = JSON.parse(evt.data); 
+					if ('config' in obj) {
+						document.getElementById("ws_msg").innerHTML += "Config received for "+obj.config.id+"<br/>"
+						
+						fillMode = obj.config.fillMode;
+						document.getElementById(fillMode.toLowerCase()).checked = true;
+						fullMode = obj.config.fullMode;
+						document.getElementById(fullMode.toLowerCase()).checked = true;
+					}
+				} catch(e) { // in case parse fails, not JSON 
+					document.getElementById("ws_msg").innerHTML += msg;
 				}
 			  }
 		   };
@@ -88,6 +91,23 @@
 	 function getCurrentConfig() {
 		globals.ws.send("getConfig");
 	 }
+	 
+	function onPumpChange(obj) {
+	  if($(obj).is(":checked")){
+		globals.ws.send("startPump");
+	  } else {
+		globals.ws.send("stopPump");
+	  }
+	}	 
+	function onValveChange(obj) {
+	  if($(obj).is(":checked")){
+		globals.ws.send("openValve");
+	  } else {
+		globals.ws.send("closeValve");
+	  }
+	}	 
+	 
+
   </script>
   </head>
 <body>
@@ -96,9 +116,10 @@
   <script>
 	  $(document).ready(function() {
 		$('select').material_select();
+	
 		// do init of options
 		WebSocketInit();
-		//getCurrentConfig();
+		console.log('debug');
 	  });
   </script>
   
@@ -163,7 +184,7 @@
 					<div class="switch"> 
 						<label>
 						  Off
-						  <input type="checkbox" id="pump">
+						  <input type="checkbox" id="pump" onchange="onPumpChange(this)">
 						  <span class="lever"></span>
 						  On
 						</label>
@@ -174,7 +195,7 @@
 					<div class="switch">
 						<label>
 						  Off
-						  <input type="checkbox" id="valve">
+						  <input type="checkbox" id="valve" onchange="onValveChange(this)">
 						  <span class="lever"></span>
 						  On
 						</label>
@@ -193,13 +214,8 @@
   <footer class="page-footer orange">
     <div class="container">
       <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">About</h5>
-          <p class="grey-text text-lighten-4">
-			This is a test page for controlling the filling of a tank from a well using a bilge pump and a valve.
-		  </p>
-        </div>
-        <div class="col l3 s12">
+
+        <div class="col s12">
           <h5 class="white-text">Status</h5>
           <ul>
             <li id="ws_msg" class="white-text"></li>
