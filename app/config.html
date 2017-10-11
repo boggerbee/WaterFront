@@ -58,10 +58,21 @@
 		   };
 			
 		   globals.ws.onmessage = function (evt) { 
-			  document.getElementById("ws_msg").innerHTML += evt.data+"<br/>";
 			  if (evt.data == "WHOAREYOU") {
 				globals.ws.send("GUI"); // register as gui client
 				globals.ws.send("getConfig");
+			  } else {
+				obj = JSON.parse(evt.data);
+				if (obj.config != null) {
+					document.getElementById("ws_msg").innerHTML += "Config received for "+obj.config.id+"<br/>"
+					
+					fillMode = obj.config.fillMode;
+					document.getElementById(fillMode.toLowerCase()).checked = true;
+					fullMode = obj.config.fullMode;
+					document.getElementById(fullMode.toLowerCase()).checked = true;
+				} else {
+					document.getElementById("ws_msg").innerHTML += evt.data+"<br/>";
+				}
 			  }
 		   };
 			
@@ -115,12 +126,12 @@
               <p>Du kan velge om pumpen skal brukes under fylling eller ikke. Ved å bare la vannet falle naturlig vil brønnen ikke tømmes like raskt.</p>
             </div>
             <div class="card-action">
-			  <input name="group1" type="radio" id="fill1"/>
-			  <label class="white-text" for="fill1">Av</label>
-			  <input name="group1" type="radio" id="fill2" checked />
-			  <label class="white-text" for="fill2">Pumpe</label>
-			  <input name="group1" type="radio" id="fill3" />
-			  <label class="white-text" for="fill3">Naturlig fall</label>
+			  <input name="group1" type="radio" id="off"/>
+			  <label class="white-text" for="off">Av</label>
+			  <input name="group1" type="radio" id="fast"/>
+			  <label class="white-text" for="fast">Pumpe</label>
+			  <input name="group1" type="radio" id="slow" />
+			  <label class="white-text" for="slow">Naturlig fall</label>
             </div>
           </div>
         </div>
@@ -131,14 +142,49 @@
               <p>Velg om flottøren skal brukes for å starte og stoppe fylling, eller om nivåmåleren skal brukes.</p>
             </div>
             <div class="card-action">
-			  <input name="group2" type="radio" id="test1" checked />
-			  <label class="white-text" for="test1">Nivåmåler</label>
-			  <input name="group2" type="radio" id="test2" />
-			  <label class="white-text" for="test2">Flottør</label>
+			  <input name="group2" type="radio" id="switch"/>
+			  <label class="white-text" for="switch">Flottørbryter</label>
+			  <input name="group2" type="radio" id="level" />
+			  <label class="white-text" for="level">Nivåmåler</label>
             </div>
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Manuell styring</span>
+              <p>Styring av aktuatorer på en manuell måte.</p>
+            </div>
+            <div class="card-action">
+				<div class="section white-text">
+				<h6>Pumpe</h6>
+					<div class="switch">
+						<label>
+						  Off
+						  <input type="checkbox" id="pump">
+						  <span class="lever"></span>
+						  On
+						</label>
+					</div>
+				</div>
+				<div class="section white-text">
+				<h6>Ventil</h6>
+					<div class="switch">
+						<label>
+						  Off
+						  <input type="checkbox" id="valve">
+						  <span class="lever"></span>
+						  On
+						</label>
+					</div>
+				</div>
+            </div>
+          </div>
+        </div>
+      </div>
+	  
 	<br/>
     </div>
   </div>

@@ -9,6 +9,42 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+	
+	function drawChart() {
+		d3.json("http://data.kreutzer.no/dataserver/api/current", function(error, data) {
+			console.log(data);
+			document.getElementById("level").innerHTML = data.level.toFixed()+'%';
+			//document.getElementById("flow").innerHTML = data.flow.toFixed(1)+' l/h';
+			document.getElementById("pump").innerHTML = data.pumpState;
+			document.getElementById("valve").innerHTML = data.valveState;
+			document.getElementById("status").innerHTML = data.state;
+			document.getElementById("switch").innerHTML = data.switchState;
+			
+			var str = data.date;
+			str = str.replace("T"," ");
+			document.getElementById("updated").innerHTML = str.substring(0, str.length - 9);
+			
+			var level = data.level.toFixed();
+			var chartData = google.visualization.arrayToDataTable([
+			  ['Label', 'Value'],
+			  ['Level', level]
+			]);
+			var chartOptions = {
+			  width: 200, height: 200,
+			  redFrom: 90, redTo: 100,
+			  yellowFrom:75, yellowTo: 90,
+			  minorTicks: 5
+			};
+			var chart = new google.visualization.Gauge(document.getElementById('chart_div'));        
+			chart.draw(chartData, chartOptions);
+		});
+	}
+	</script>
 </head>
 <body>
 <script src="js/FBlogin.js"></script>
@@ -29,17 +65,14 @@
     <div class="container">
       <br><br>
       <h1 id="status" class="header center orange-text">FULL</h1>
-      <div class="row center">
-		<!-- img src="tank.svg"/ -->
-        <!--h5 class="header col s12 light">Insert graph or SVG image of installation here</h5 -->
-      </div>
-      <div class="row center">
-        <a href="" id="download-button" class="btn-large waves-effect waves-light orange">AUTO</a>
-      </div>
-      <br><br>
-
     </div>
-  </div>
+    <div class="container">
+      <div class="row center">
+		<div id="chart_div" style="width: 200px; height: 200px;"></div>     
+      </div>
+	</div>
+      <br><br>
+	</div>
 
 
   <div class="container">
@@ -54,12 +87,20 @@
             <p class="center light">Current water level</p>
           </div>
         </div>
-
+<!--
         <div class="col s12 m3">
           <div class="icon-block">
             <h2 class="center light-blue-text"><i class="material-icons">input</i></h2>
             <h5 id="flow" class="center">42 l/h</h5>
             <p class="center light">Current water flow</p>
+          </div>
+        </div>
+-->		
+       <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">play_for_work</i></h2>
+            <h5 id="switch" class="center">OPEN</h5>
+            <p class="center light">Full switch state</p>
           </div>
         </div>
 		
@@ -78,7 +119,8 @@
             <p class="center light">Valve status</p>
           </div>
         </div>
-      </div>
+		
+       </div>
 
     </div>
     <br><br>
@@ -130,19 +172,7 @@
 	<script src="js/init.js"></script>
 	<!-- endbuild -->
 	<script>
-	d3.json("http://data.kreutzer.no/dataserver/api/current", function(error, data) {
-		console.log(data);
-		document.getElementById("level").innerHTML = data.level.toFixed()+'%';
-		document.getElementById("flow").innerHTML = data.flow.toFixed(1)+' l/h';
-		document.getElementById("pump").innerHTML = data.pumpState;
-		document.getElementById("valve").innerHTML = data.valveState;
-		document.getElementById("status").innerHTML = data.state;
-		//document.getElementById("tank-text").innerHTML = data.level+'%';
-		
-		var str = data.date;
-		str = str.replace("T"," ");
-		document.getElementById("updated").innerHTML = str.substring(0, str.length - 9);
-	});
+
 	</script>
   </body>
 </html>
