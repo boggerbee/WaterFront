@@ -120,6 +120,27 @@
 		globals.ws.send("closeValve");
 	  }
 	}	 
+	function onFillChange(obj) {
+	  if($(obj).attr("id") == "off"){
+		globals.ws.send("setFillModeOFF");
+	  } 
+	  if($(obj).attr("id") == "fast"){
+		globals.ws.send("setFillModeFAST");
+	  } 
+	  if($(obj).attr("id") == "slow"){
+		globals.ws.send("setFillModeSLOW");
+	  } 
+	  globals.ws.send("getState"); // to update the pump and valve 
+	}	 
+	function onFullChange(obj) {
+	  if($(obj).attr("id") == "switch"){
+		globals.ws.send("setFullModeSWITCH");
+	  } 
+	  if($(obj).attr("id") == "level"){
+		globals.ws.send("setFullModeLEVEL");
+	  } 
+	  globals.ws.send("getState"); // to update the pump and valve 
+	}	 
 	 
 
   </script>
@@ -161,11 +182,11 @@
               <p>Du kan velge om pumpen skal brukes under fylling eller ikke. Ved å bare la vannet falle naturlig vil brønnen ikke tømmes like raskt.</p>
             </div>
             <div class="card-action">
-			  <input name="group1" type="radio" id="off"/>
+			  <input name="fill" type="radio" id="off" onchange="onFillChange(this)"/>
 			  <label class="white-text" for="off">Av</label>
-			  <input name="group1" type="radio" id="fast"/>
+			  <input name="fill" type="radio" id="fast" onchange="onFillChange(this)"/>
 			  <label class="white-text" for="fast">Pumpe</label>
-			  <input name="group1" type="radio" id="slow" />
+			  <input name="fill" type="radio" id="slow"  onchange="onFillChange(this)"/>
 			  <label class="white-text" for="slow">Naturlig fall</label>
             </div>
           </div>
@@ -177,9 +198,9 @@
               <p>Velg om flottøren skal brukes for å starte og stoppe fylling, eller om nivåmåleren skal brukes.</p>
             </div>
             <div class="card-action">
-			  <input name="group2" type="radio" id="switch"/>
+			  <input name="full" type="radio" id="switch" onchange="onFullChange(this)"/>
 			  <label class="white-text" for="switch">Flottørbryter</label>
-			  <input name="group2" type="radio" id="level" />
+			  <input name="full" type="radio" id="level" onchange="onFullChange(this)"/>
 			  <label class="white-text" for="level">Nivåmåler</label>
             </div>
           </div>
