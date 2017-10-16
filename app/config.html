@@ -113,16 +113,21 @@
               <p>Måler hvor mye vann som renner gjennom påfyllingsslangen. </p>
             </div>
 			<!-- TODO: sett opp i tabell med liter under og liter per sekund -->
-            <div class="card-action white-text strong">
-				<div class="col s3 m3" font-weight="bold">
+            <div class="card-action white-text">
+				<div class="col s2 m2">
+				  <input type="checkbox" class="filled-in" id="live-data"  onchange="onLiveChange(this)"/>
+				  <label for="live-data"><div class="hide-on-med-and-down">Live</div></label>
+				</div>
+				<div class="col s2 m3">
 					Totalt: 
 				</div>
-				<div class="col s3 m3" id="totalCount">-</div>
-				<div class="col s3 m3">
+				<div class="col s2 m3" id="totalCount">-</div>
+				<div class="col s2 m2">
 					Flyt: 
 				</div>
-				<div class="col s3 m3" id="currentCount">-</div>
+				<div class="col s2 m2" id="currentCount">-</div>
 				<br/>
+				<p>Totalen måles i antall pulser, mens flyt måles i antall pulser per sekund.</p>
             </div>
           </div>
         </div>

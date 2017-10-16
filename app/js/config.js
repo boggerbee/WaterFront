@@ -61,8 +61,9 @@
 						fullMode = obj.config.fullMode;
 						document.getElementById(fullMode.toLowerCase()).checked = true;
 						document.getElementById("totalCount").innerHTML = obj.config.totalFlow;
+						document.getElementById("live-data").checked = obj.config.liveFlow;
 					} else if ('state' in obj){
-						document.getElementById("ws_msg").innerHTML += "State received.<br/>"
+						//document.getElementById("ws_msg").innerHTML += "State received.<br/>"
 						if (obj.state.pump == "ON") {
 							document.getElementById("pump").checked = true;
 						} else {
@@ -73,7 +74,7 @@
 						} else {
 							document.getElementById("valve").checked = false;
 						}
-					// document.getElementById("ws_msg").innerHTML += msg;
+					 //document.getElementById("ws_msg").innerHTML += msg;
 					} else if ('flow' in obj){
 						document.getElementById("totalCount").innerHTML = obj.flow.total;
 						document.getElementById("currentCount").innerHTML = obj.flow.current;
@@ -132,5 +133,12 @@
 		globals.ws.send("setFullModeLEVEL");
 	  } 
 	  globals.ws.send("getState"); // to update the pump and valve 
+	}	 
+	function onLiveChange(obj) {
+	  if($(obj).is(":checked")){
+		globals.ws.send("liveOn");
+	  } else {
+		globals.ws.send("liveOff");
+	  }
 	}	 
 	 
