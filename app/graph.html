@@ -30,7 +30,13 @@
 	  <div class="row center" id='levelgraph'></div>
 	  <div class="row center" id='flowgraph'></div>
       <div class="row center">
-        <a href="" id="download-button" class="btn-large waves-effect waves-light orange">BUTTON</a>
+        <div class="col s12">
+          Antall timer tilbake:
+          <div class="input-field inline">
+            <input id="hrs" size="5">
+          </div>
+        </div>
+		<a class="waves-effect waves-light btn" onclick="updateGraphs()">Oppdater</a>		
       </div>
       <br><br>
 
@@ -64,6 +70,7 @@
 	<!--build:js js/main.min.js -->
 	<script src="js/materialize.js"></script>
 	<script src="js/init.js"></script>
+	<script src="js/graph.js"></script>
 	
     <script src='js/MG.js'></script>
     <script src='js/misc/utility.js'></script>
@@ -94,68 +101,5 @@
     <script src='js/misc/transitions.js'></script>
     <script src='js/misc/error.js'></script>
 	<!-- endbuild -->
-	
-	<script>
-		var parseTime = d3.timeParse("%Y-%m-%dT%H:%M:%S");
-		var graphWidth = 500;
-		if(window.innerWidth <= 800) {
-			graphWidth = 300;
-		}
-		var globals = {};
-		
-		d3.json('http://data.kreutzer.no/dataserver/api/graphmarkers', function(data) {
-			data.forEach(function (d) {
-			var str = d.date; 
-			if (str != null) {
-				d.date = parseTime(str.substring(0, str.length - 9));
-			}
-			});	
-			globals.data = data;
-		});
-		d3.json('http://data.kreutzer.no/dataserver/api/graphlevel?hrs=24', function(data) {
-			data.forEach(function (d) {
-			var str = d.date; 
-			if (str != null) {
-				d.date = parseTime(str.substring(0, str.length - 9));
-			}
-			});	
-
-			MG.data_graphic({
-				title: "Level plot",
-				//description: "Plot of tank level last x days",
-				data: data,
-				width: graphWidth,
-				height: 200,
-				right: 40,
-				markers: globals.data,
-				min_y_from_data: true,
-				xax_count: 4,
-				linked: true,
-				format: 'percentage',
-				target: '#levelgraph'
-			});
-		});
-		d3.json('http://data.kreutzer.no/dataserver/api/graphflow?hrs=24', function(data) {
-			data.forEach(function (d) {
-			var str = d.date; 
-			if (str != null) {
-				d.date = parseTime(str.substring(0, str.length - 9));
-			}
-			});	
-
-			MG.data_graphic({
-				title: "Flow plot",
-				data: data,
-				width: graphWidth,
-				height: 200,
-				right: 40,
-				xax_count: 4,
-				linked: true,
-				area: false,
-				//y_label: 'litres/min',
-				target: '#flowgraph'
-			});
-		});
-	</script>
   </body>
 </html>
