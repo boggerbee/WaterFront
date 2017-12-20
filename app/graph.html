@@ -31,15 +31,28 @@
 	  <div class="row center" id='flowgraph'></div>
       <div class="row center">
         <div class="col s12">
-          Antall timer tilbake:
-          <div class="input-field inline">
-            <input id="hrs" size="5">
-          </div>
+		
+        <div class="input-field col s1 offset-s4">
+          <input id="start_date" type="text" class="datepicker">
+          <label for="start_date" class="active">Start</label>
         </div>
-		<a class="waves-effect waves-light btn" onclick="updateGraphs()">Oppdater</a>		
+        <div class="input-field col s1">
+		  <input id="start_time" type="text" class="timepicker">
+        </div>
+        <div class="input-field col s1">
+          <input id="end_date" type="text" class="datepicker">
+          <label for="end_date" class="active">Slutt</label>
+        </div>
+        <div class="input-field col s1">
+		  <input id="end_time" type="text" class="timepicker">
+        </div>
+        <!--div class="input-field col s6">
+          <input placeholder="Placeholder" id="hrs" size="5">
+          <label for="hrs" class="active">Timer</label>
+        </div -->
       </div>
+		<a class="waves-effect waves-light btn" onclick="updateGraphs()">Oppdater</a>		
       <br><br>
-
     </div>
   </div>
 
