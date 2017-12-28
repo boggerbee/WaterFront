@@ -37,6 +37,8 @@ function updateGraphs() {
 			//description: "Plot of tank level last x days",
 			data: data,
 			width: graphWidth,
+			interpolate: d3.curveLinear,
+			missing_is_hidden: true,
 			height: 200,
 			right: 40,
 			markers: globals.data,
