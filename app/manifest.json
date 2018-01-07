@@ -1,0 +1,25 @@
+{
+  "short_name": "WaterControl",
+  "name": "Water control system",
+  "icons": [
+    {
+      "src": "images/icon_48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "images/icon_96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "images/icon_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html?launcher=true",
+  "display": "standalone",
+  "background_color": "#29b6f6",
+  "theme_color": "#29b6f6"
+}

@@ -3,18 +3,20 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Water Control</title>
+  <title>WaterControl</title>
+  <link rel="manifest" href="/manifest.json"/>
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href='css/metricsgraphics.css' rel='stylesheet' type='text/css'>
-  <script type="text/javascript" src="js/config.js"></script>  
   </head>
 <body>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+  <script type="text/javascript" src="js/config.js"></script>  
   <script>
 	  $(document).ready(function() {
 		$('select').material_select();
@@ -26,7 +28,7 @@
   </script>
   
   <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Water Control</a>
+    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">WaterControl</a>
       <ul class="right hide-on-med-and-down">
         <li><a href="/">Home</a></li>
       </ul>

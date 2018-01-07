@@ -93,6 +93,12 @@ gulp.task('js', function() {
     .pipe(gulp.dest('dist/js'))
 })
 
+// Copying json 
+gulp.task('json', function() {
+  return gulp.src('app/*.json')
+    .pipe(gulp.dest('dist/'))
+})
+
 // Cleaning 
 gulp.task('clean', function() {
   return del.sync('dist').then(function(cb) {
@@ -129,7 +135,7 @@ gulp.task('build', function(callback) {
   runSequence(
     'clean:dist',
     'sass',
-    ['useref', 'images', 'fonts','css','js','ico'],
+    ['useref', 'images', 'fonts','css','js','ico','json'],
 	'war',
     callback
   )
