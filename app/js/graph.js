@@ -3,7 +3,7 @@ var graphWidth = 500;
 var now = new Date();
 var endDate = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
 now.setDate(now.getDate()-2);
-var startDate = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+var startDate = '2018-1-6';//now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
 var startTime = '00:00'; 
 var endTime = '23:59'; //now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
 
@@ -33,7 +33,7 @@ function updateGraphs() {
 	d3.json('http://data.kreutzer.no/dataserver/api/level?'+params, function(data) {
 		MG.convert.date(data, "date","%d-%m-%Y %H:%M:%S");
 		MG.data_graphic({
-			title: "Level plot",
+			//title: "Level plot",
 			//description: "Plot of tank level last x days",
 			data: data,
 			width: graphWidth,
@@ -52,7 +52,7 @@ function updateGraphs() {
 	d3.json('http://data.kreutzer.no/dataserver/api/flow?'+params, function(data) {
 		MG.convert.date(data, "date","%d-%m-%Y %H:%M:%S");
 		MG.data_graphic({
-			title: "Flow plot",
+			//title: "Flow plot",
 			data: data,
 			width: graphWidth,
 			height: 200,

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
@@ -11,6 +12,14 @@
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href='css/metricsgraphics.css' rel='stylesheet' type='text/css'>
+	<style>
+	.mg-x-axis text,
+	.mg-y-axis text,
+	.mg-markers text {
+		fill:white;
+		opacity:0.8;
+	}
+	</style>  
 </head>
 <body>
   <nav class="light-blue lighten-1" role="navigation">
@@ -27,9 +36,18 @@
   </nav>
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
-      <br><br>
-	  <div class="row center" id='levelgraph'></div>
-	  <div class="row center" id='flowgraph'></div>
+	   <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+				<span class="card-title">Tanknivå over tid</span>
+				<div class="row center" id='levelgraph'></div>
+            </div>	   
+	  </div>
+	   <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+				<span class="card-title">Vannstrøm over tid</span>
+				<div class="row center" id='flowgraph'></div>
+            </div>	   
+	  </div>
       <div class="row center">
         <div class="input-field col s4 l1 offset-l4">
           <input id="start_date" type="text" class="datepicker">
