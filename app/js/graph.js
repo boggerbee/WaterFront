@@ -3,7 +3,7 @@ var graphWidth = 500;
 var now = new Date();
 var endDate = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
 now.setDate(now.getDate()-2);
-var startDate = '2018-1-6';//now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+var startDate = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
 var startTime = '00:00'; 
 var endTime = '23:59'; //now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
 
