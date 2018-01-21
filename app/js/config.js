@@ -1,3 +1,10 @@
+	var globals = {};
+	var smoothie = new SmoothieChart(); /*{
+	  grid: { strokeStyle:'rgb(255, 255, 255)', fillStyle:'rgb(60, 0, 0)',
+			  lineWidth: 1, millisPerLine: 500, verticalSections: 4, },
+	  labels: { fillStyle:'rgb(60, 0, 0)' }}); */
+	var flowLine = new TimeSeries();
+
 	window.fbAsyncInit = function() {
 	  FB.init({
 		appId      : '212617012591381',
@@ -11,6 +18,11 @@
 		statusChangeCallback(response);
 	  });
 	};
+	
+	$("#live-data").click(function(event) {
+		console.log("click");
+		event.stopImmediatePropagation();
+	});
 
 	(function(d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];
@@ -35,7 +47,6 @@
 		  statusChangeCallback(response);
 		});
 	}  
-  var globals = {}
 	 function WebSocketInit() {
 		if ("WebSocket" in window) {
 		   // Let us open a web socket
@@ -61,7 +72,8 @@
 						fullMode = obj.config.fullMode;
 						document.getElementById(fullMode.toLowerCase()).checked = true;
 						document.getElementById("totalCount").innerHTML = obj.config.totalFlow;
-						document.getElementById("live-data").checked = obj.config.liveFlow;
+						//document.getElementById("live-data").checked = obj.config.liveFlow;
+					 //document.getElementById("ws_msg").innerHTML += msg;
 					} else if ('state' in obj){
 						//document.getElementById("ws_msg").innerHTML += "State received.<br/>"
 						if (obj.state.pump == "ON") {
@@ -78,6 +90,7 @@
 					} else if ('flow' in obj){
 						document.getElementById("totalCount").innerHTML = obj.flow.total;
 						document.getElementById("currentCount").innerHTML = obj.flow.current;
+						flowLine.append(new Date().getTime(), obj.flow.current);
 					 //document.getElementById("ws_msg").innerHTML += msg;
 					}
 				} catch(e) { // in case parse fails, not JSON 
@@ -134,11 +147,22 @@
 	  } 
 	  globals.ws.send("getState"); // to update the pump and valve 
 	}	 
-	function onLiveChange(obj) {
+	function onLiveChange(event,obj) {
 	  if($(obj).is(":checked")){
+	 //if ($(obj).checked) {
+		SmoothieInit();
 		globals.ws.send("liveOn");
 	  } else {
 		globals.ws.send("liveOff");
 	  }
+		console.log("click");
+
+	  event.stopImmediatePropagation();
 	}	 
-	 
+	function SmoothieInit() {
+		smoothie.streamTo(document.getElementById("liveChart"), 1000);
+		/*setInterval(function() {
+		  flowLine.append(new Date().getTime(), Math.random());
+		}, 1000);*/
+		smoothie.addTimeSeries(flowLine,{ strokeStyle:'rgb(66, 165, 245)', fillStyle:'rgba(66, 165, 245, 0.35)', lineWidth:2 }); //42a5f5
+	} 

@@ -15,6 +15,7 @@
 <body>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize.js"></script>
+  <script type="text/javascript" src="js/smoothie.js"></script>
   <script type="text/javascript" src="js/config.js"></script>  
   <script>
 	  $(document).ready(function() {
@@ -116,7 +117,7 @@
 			<!-- TODO: sett opp i tabell med liter under og liter per sekund -->
             <div class="card-action white-text">
 				<div class="col s2">
-				  <input type="checkbox" class="filled-in" id="live-data"  onchange="onLiveChange(this)"/>
+				  <input type="checkbox" class="filled-in" id="live-data"  onchange="onLiveChange(event,this)"/>
 				  <label for="live-data"><div class="hide-on-med-and-down">Live</div></label>
 				</div>
 				<div class="col s2">
@@ -129,6 +130,10 @@
 				</div>
 				<div class="col s2" id="currentCount">-</div>
 				<br/>
+				<br/>
+				<div class="center">
+					<canvas id="liveChart" width="200" height="50"></canvas>
+				</div>
 				<p>Totalen måles i antall pulser, mens flyt måles i antall pulser per sekund.</p>
             </div>
           </div>
