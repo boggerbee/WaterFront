@@ -53,6 +53,7 @@
 		   globals.ws = new WebSocket("ws://data.kreutzer.no/dataserver/websocket");
 			
 		   globals.ws.onopen = function() {
+				Materialize.toast("Tilkoblet!",4000);
 		   };
 			
 		   globals.ws.onmessage = function (evt) { 
@@ -100,17 +101,26 @@
 		   };
 			
 		   globals.ws.onclose = function() { 
-			  // websocket is closed.
-			  document.getElementById("ws_msg").innerHTML = "Connection is closed..."; 
+			// websocket is closed.
+			document.getElementById("ws_msg").innerHTML = "Connection is closed..."; 
+			var $toastContent = $('<span>Frakoblet.</span>').add($('<button onclick="{WebSocketInit();removeToast();}" class="btn-flat toast-action">Koble til</button>'));
+			Materialize.toast($toastContent);
 		   };
 		} else {
 		   // The browser doesn't support WebSocket
 		   alert("WebSocket NOT supported by your Browser!");
 		}
-	 }
-	 function getCurrentConfig() {
+	}
+	 
+	function removeToast() {
+	   var toastElement = $('.toast').first()[0];
+	   var toastInstance = toastElement.M_Toast;
+	   toastInstance.remove();
+	}
+	 
+	function getCurrentConfig() {
 		globals.ws.send("getConfig");
-	 }
+	}
 	 
 	function onPumpChange(obj) {
 	  if($(obj).is(":checked")){

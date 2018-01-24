@@ -1,26 +1,33 @@
 var parseTime = d3.timeParse("%Y-%m-%dT%H:%M:%S");
 var graphWidth = 500;
-var now = new Date();
-var endDate = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
-now.setDate(now.getDate()-2);
-var startDate = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
-var startTime = '00:00'; 
-var endTime = '23:59'; //now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
 
-
-document.getElementById("start_date").value = startDate;
-document.getElementById("end_date").value = endDate;
-document.getElementById("start_time").value = startTime;
-document.getElementById("end_time").value = endTime;
+setGraphInterval(12);
 
 if(window.innerWidth <= 800) {
 	graphWidth = 300;
 }
 var globals = {};
 
+function setGraphInterval(interval) {
+	var msecPerMinute = 1000 * 60;  
+	var msecPerHour = msecPerMinute * 60;  
+	var now = new Date();
+	var nowMsec = now.getTime(); 
+	var startMsec = nowMsec - (interval*msecPerHour);
+	var startDate = new Date();
+	startDate.setTime(startMsec);
+
+	document.getElementById("start_date").value = startDate.getFullYear()+'-'+(startDate.getMonth()+1)+'-'+startDate.getDate();
+	document.getElementById("start_time").value = startDate.getHours()+':'+startDate.getMinutes();
+	document.getElementById("end_date").value = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+	document.getElementById("end_time").value = now.getHours()+':'+now.getMinutes();
+
+	updateGraphs();
+}
+
 function updateGraphs() {
-	startDate = document.getElementById("start_date").value+'T'+document.getElementById("start_time").value+':00+01:00';
-	endDate = document.getElementById("end_date").value+'T'+document.getElementById("end_time").value+':00+01:00';
+	var startDate = document.getElementById("start_date").value+'T'+document.getElementById("start_time").value+':00+01:00';
+	var endDate = document.getElementById("end_date").value+'T'+document.getElementById("end_time").value+':00+01:00';
 	
 	var params = 'id=Almedalen25&s='+encodeURIComponent(startDate)+'&e='+encodeURIComponent(endDate);
 	console.log(params);
