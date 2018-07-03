@@ -10,13 +10,19 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href='css/metricsgraphics.css' rel='stylesheet' type='text/css'>
+   
   
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
    <script type="text/javascript">
-      google.charts.load('current', {'packages':['gauge']});
+      google.charts.load('current', {'packages':['bar']});
       google.charts.setOnLoadCallback(drawChart);
 	
 	function drawChart() {
+		var graphWidth = 500;
+		if(window.innerWidth <= 800) {
+			graphWidth = 300;
+		}	
 		d3.json("http://data.kreutzer.no/dataserver/api/current", function(error, data) {
 			console.log(data);
 			document.getElementById("level").innerHTML = data.level.toFixed()+'%';
@@ -29,35 +35,41 @@
 			var str = data.date;
 			str = str.replace("T"," ");
 			document.getElementById("updated").innerHTML = str.substring(0, str.length - 9);
-			
-			var level = data.level.toFixed();
-			var chartData = google.visualization.arrayToDataTable([
-			  ['Label', 'Value'],
-			  ['Level', level]
-			]);
-			var chartOptions = {
-			  width: 200, height: 200,
-			  redFrom: 90, redTo: 100,
-			  yellowFrom:75, yellowTo: 90,
-			  minorTicks: 5
-			};
-			var chart = new google.visualization.Gauge(document.getElementById('chart_div'));        
-			chart.draw(chartData, chartOptions);
 		});
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Dato');
+		data.addColumn('number', 'Forbruk');
+		
+		var options = {
+		  chart: {
+			//title: 'Vannforbruk',
+			//subtitle: 'Liter per dag siste 14 dager',
+		  },
+		  width: graphWidth,
+		  height: 200,
+		  bars: 'vertical', 
+		  colors: ['#29b6f6'],
+		  bar: { groupWidth: '95%' },
+		  legend: { position: "none" }
+		};
+		var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+		
+		// Add data.
+		d3.json("http://data.kreutzer.no/dataserver/api/volume?id=Almedalen25&ppl=254", function(error, json) {
+			var i;
+			for (i = 0; i < json.length; i++) { 
+				var d = json[i].date;
+				var day = d.substr(0,2)+"/"+d.substr(3,2);
+				//console.log("date: "+day);
+				data.addRow([day,json[i].value]);
+			}
+			chart.draw(data, google.charts.Bar.convertOptions(options));
+		});
+
 	}
 	</script>
 </head>
 <body>
-  <!-- div class="fixed-action-btn horizontal click-to-toggle">
-    <a class="btn-floating btn-large blue">
-      <i class="large material-icons">settings</i>
-    </a>
-    <ul>
-      <li><a class="btn-floating red" href="graph.html"><i class="material-icons">insert_chart</i></a></li>
-      <li><a class="btn-floating green darken-1"><i class="material-icons">settings</i></a></li>
-    </ul>
-  </div -->
-  
 <script src="js/FBlogin.js"></script>
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">WaterControl</a>
@@ -74,13 +86,16 @@
   </nav>
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
-      <br><br>
       <h1 id="status" class="header center orange-text">FULL</h1>
 	  <h2 id="level" class="center">98%</h5>
+		   <div class="card center">
+				<div class="card-content">
+					<span class="card-title">Vannforbruk siste 14d [l]</span>
+					<div class="row center" id="barchart_material" style="display: inline-block;"></div>
+				</div>	   
+		   </div>
     </div>
-
-      <br><br>
-	</div>
+  </div>
 
 
   <div class="container">
@@ -159,6 +174,35 @@
 	<!--build:js js/main.min.js -->
     <script src="js/materialize.js"></script>
 	<script src="js/init.js"></script>
+
+    <script src='js/MG.js'></script>
+    <script src='js/misc/utility.js'></script>
+    <script src='js/common/data_graphic.js'></script>
+    <script src='js/common/hooks.js'></script>
+    <script src='js/common/register.js'></script>
+    <script src='js/common/bootstrap_tooltip_popover.js'></script>
+    <script src='js/common/scales.js'></script>
+    <script src='js/common/chart_title.js'></script>
+    <script src='js/common/y_axis.js'></script>
+    <script src='js/common/x_axis.js'></script>
+    <script src='js/common/scales.js'></script>
+    <script src='js/common/init.js'></script>
+    <script src='js/common/markers.js'></script>
+    <script src='js/common/rollover.js'></script>
+    <script src='js/common/window_listeners.js'></script>
+    <script src='js/layout/bootstrap_dropdown.js'></script>
+    <script src='js/layout/button.js'></script>
+    <script src='js/charts/line.js'></script>
+    <script src='js/charts/histogram.js'></script>
+    <script src='js/charts/point.js'></script>
+    <script src='js/charts/bar.js'></script>
+    <script src='js/charts/table.js'></script>
+    <script src='js/charts/missing.js'></script>
+    <script src='js/misc/process.js'></script>
+    <script src='js/misc/smoothers.js'></script>
+    <script src='js/misc/formatters.js'></script>
+    <script src='js/misc/transitions.js'></script>
+    <script src='js/misc/error.js'></script>
 	<!-- endbuild -->
 	<script>
 
